@@ -15,6 +15,3 @@ export function Layout() {
     </div>
   );
 }
-
-/* <Outlet /> é um "espaço reservado" do React Router. É ali que a página da rota atual (Hoje, Próximas etc.) é encaixada.
- A Sidebar e o Header ficam fixos, e só o conteúdo do Outlet muda. */
