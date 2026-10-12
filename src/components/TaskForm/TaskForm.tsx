@@ -5,6 +5,7 @@ import "./TaskForm.css";
 type NovaTarefa = Omit<Tarefa, "_id">;
 
 type TaskFormProps = {
+  tarefaInicial?: Tarefa;
   aoSalvar: (tarefa: NovaTarefa) => Promise<void>;
   aoCancelar: () => void;
 };
@@ -18,9 +19,11 @@ const estadoInicial: NovaTarefa = {
   concluida: false,
 };
 
-export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
-  const [formulario, setFormulario] = useState<NovaTarefa>(estadoInicial);
+export function TaskForm({ tarefaInicial, aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
+  const [formulario, setFormulario] = useState<NovaTarefa>(tarefaInicial ?? estadoInicial); /* O '??' significa use o da esquerda; se ele não existir, o da direita*/
   const [salvando, setSalvando] = useState(false);
+  const editando = tarefaInicial !== undefined;
+  const textoBotao = editando ? "Salvar alterações" : "Criar tarefa";
 
   function alterarCampo(campo: keyof NovaTarefa, valor: string | boolean) {
     setFormulario((estadoAtual) => ({
@@ -42,7 +45,7 @@ export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
 
   return (
     <form className="task-form" onSubmit={enviarFormulario}>
-      <h2>Nova tarefa</h2>
+      <h2>{editando ? "Editar tarefa" : "Nova tarefa"}</h2>
       <label>
         <span>Título</span>
         <input
@@ -97,7 +100,7 @@ export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
           Cancelar
         </button>
         <button type="submit" disabled={salvando}>
-          {salvando ? "Salvando..." : "Criar tarefa"}
+          {salvando ? "Salvando..." : textoBotao}
         </button>
       </div>
     </form>
