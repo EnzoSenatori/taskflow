@@ -6,7 +6,7 @@ import "./Tasks.css";
 
 export function Tasks() {
   const { abrirTaskModal, abrirEdicaoTarefa } = useOutletContext<LayoutContext>();
-  const { tarefas, carregando, erro, removerTarefa } = useTarefas();
+  const { tarefas, carregando, erro, removerTarefa, alternarConclusao } = useTarefas();
 
   return (
     <section className="tasks-page">
@@ -21,7 +21,16 @@ export function Tasks() {
         </button>
       </div>
       {erro && <p className="tasks-page__error">{erro}</p>}
-      {carregando ? <p>Carregando tarefas...</p> : <TaskList tarefas={tarefas} aoEditar={abrirEdicaoTarefa} aoExcluir={removerTarefa} />}
+      {carregando ? (
+        <p>Carregando tarefas...</p>
+      ) : (
+        <TaskList
+          tarefas={tarefas}
+          aoEditar={abrirEdicaoTarefa}
+          aoAlternarConclusao={alternarConclusao}
+          aoExcluir={removerTarefa}
+        />
+      )}
     </section>
   );
 }

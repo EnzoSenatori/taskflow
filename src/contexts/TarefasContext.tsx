@@ -12,6 +12,7 @@ type TarefasContextType = {
   adicionarTarefa: (novaTarefa: NovaTarefa) => Promise<void>;
   removerTarefa: (id: string) => Promise<void>;
   atualizarTarefa: (tarefa: Tarefa) => Promise<void>;
+  alternarConclusao: (tarefa: Tarefa) => Promise<void>;
 };
 
 const TarefasContext = createContext<TarefasContextType | null>(null);
@@ -81,8 +82,16 @@ export function TarefasProvider({ children }: Readonly<TarefasProviderProps>) {
     }
   }
 
+  async function alternarConclusao(tarefa: Tarefa) {
+    try {
+      await atualizarTarefa({ ...tarefa, concluida: !tarefa.concluida });
+    } catch {
+      // atualizarTarefa já registra a mensagem de erro na tela.
+    }
+  }
+
   return (
-    <TarefasContext.Provider value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa, atualizarTarefa }}>
+    <TarefasContext.Provider value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa, atualizarTarefa, alternarConclusao}}>
       {children}
     </TarefasContext.Provider>
   );
