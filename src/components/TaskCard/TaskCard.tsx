@@ -4,10 +4,11 @@ import "./TaskCard.css";
 
 type TaskCardProps = {
   tarefa: Tarefa;
+  aoEditar: (tarefa: Tarefa) => void;
   aoExcluir: (id: string) => void;
 };
 
-export function TaskCard({ tarefa, aoExcluir }: Readonly<TaskCardProps>) {
+export function TaskCard({ tarefa, aoEditar, aoExcluir }: Readonly<TaskCardProps>) {
   return (
     <article className={tarefa.concluida ? "task-card task-card--completed" : "task-card"}>
       <button
@@ -22,7 +23,7 @@ export function TaskCard({ tarefa, aoExcluir }: Readonly<TaskCardProps>) {
         <div className="task-card__header">
           <h3>{tarefa.titulo}</h3>
           <div className="task-card__actions">
-            <button type="button" aria-label="Editar tarefa">
+            <button type="button" aria-label="Editar tarefa" onClick={() => aoEditar(tarefa)}>
               <Pencil size={17} />
             </button>
             <button

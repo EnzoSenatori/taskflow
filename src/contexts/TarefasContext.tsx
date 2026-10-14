@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { criarTarefa, excluirTarefa, listarTarefas } from "../services/tarefaService";
+import { alterarTarefa, criarTarefa, excluirTarefa, listarTarefas } from "../services/tarefaService";
 import type { Tarefa } from "../types/Tarefa";
 
 type NovaTarefa = Omit<Tarefa, "_id">;
@@ -11,6 +11,7 @@ type TarefasContextType = {
   erro: string;
   adicionarTarefa: (novaTarefa: NovaTarefa) => Promise<void>;
   removerTarefa: (id: string) => Promise<void>;
+  atualizarTarefa: (tarefa: Tarefa) => Promise<void>;
 };
 
 const TarefasContext = createContext<TarefasContextType | null>(null);
@@ -61,8 +62,27 @@ export function TarefasProvider({ children }: Readonly<TarefasProviderProps>) {
     }
   }
 
+  async function atualizarTarefa(tarefa: Tarefa) {
+    const { _id, ...dados } = tarefa;
+    if (!_id) {
+      return;
+    }
+    try {
+      setErro("");
+      const tarefaAtualizada = await alterarTarefa(_id, dados);
+      setTarefas((tarefasAtuais) =>
+        tarefasAtuais.map((tarefaAtual) =>
+          tarefaAtual._id === tarefaAtualizada._id ? tarefaAtualizada : tarefaAtual
+        )
+      );
+    } catch {
+      setErro("Não foi possível atualizar a tarefa.");
+      throw new Error("Não foi possível atualizar a tarefa.");
+    }
+  }
+
   return (
-    <TarefasContext.Provider value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa }}>
+    <TarefasContext.Provider value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa, atualizarTarefa }}>
       {children}
     </TarefasContext.Provider>
   );
