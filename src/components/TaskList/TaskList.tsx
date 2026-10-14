@@ -5,10 +5,11 @@ import "./TaskList.css";
 type TaskListProps = {
   tarefas: Tarefa[];
   aoEditar: (tarefa: Tarefa) => void;
+  aoAlternarConclusao: (tarefa: Tarefa) => void;
   aoExcluir: (id: string) => void;
 };
 
-export function TaskList({ tarefas, aoEditar, aoExcluir }: Readonly<TaskListProps>) {
+export function TaskList({ tarefas, aoEditar, aoAlternarConclusao, aoExcluir }: Readonly<TaskListProps>) {
   if (tarefas.length === 0) {
     return (
       <div className="task-list__empty">
@@ -21,7 +22,7 @@ export function TaskList({ tarefas, aoEditar, aoExcluir }: Readonly<TaskListProp
   return (
     <div className="task-list">
       {tarefas.map((tarefa) => (
-        <TaskCard key={tarefa._id} tarefa={tarefa} aoEditar={aoEditar} aoExcluir={aoExcluir} />
+        <TaskCard key={tarefa._id} tarefa={tarefa} aoEditar={aoEditar} aoAlternarConclusao={aoAlternarConclusao} aoExcluir={aoExcluir} />
       ))}
     </div>
   );
